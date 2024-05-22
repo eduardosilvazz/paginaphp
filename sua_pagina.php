@@ -92,11 +92,16 @@
                     $newItem = $_POST['new-item'];
                     $_SESSION['items'][] = $newItem;
                 }
-
+                
                 // Exibir itens
+
+                echo "<form method='post' action='sua_pagina.php'>";
                 foreach ($_SESSION['items'] as $index => $item) {
-                    echo "<li>$item <form method='post' style='display:inline'><input type='hidden' name='index' value='$index'><button type='submit' name='remove'>Remover</button></form></li>";
+                    echo "<li><input type='checkbox' id='item-$index' name='item-$index'><label for='item-$index'>$item ";
+                    echo "<input type='hidden' name='checkedItems[]' value='$index'>";
+                    echo "<form method='post' style='display:inline'><input type='hidden' name='index' value='$index'><button type='submit' name='remove'>Remover</button></form></li>";
                 }
+                echo "</form>";
                 ?>
             </ul>
 
@@ -132,6 +137,14 @@
         <div class="imagem">
             <img src="https://love.doghero.com.br/wp-content/uploads/2018/12/golden-retriever-1.png" alt="cachorro">
         </div>
+    </div>
+    <!-- Player de Música -->
+    <div class="music-player">
+        <h2>Música</h2>
+        <audio controls>
+            <source src="musica.mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
     </div>
 </body>
 </html>
