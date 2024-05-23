@@ -66,6 +66,7 @@
             margin-top: 20px;
         }
     </style>
+    <link href="calendar.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
     <div class="pai">
@@ -74,26 +75,21 @@
             <h2>Minha Lista</h2>
             <ul id="item-list">
                 <?php
-                // Inicialize a lista de itens (em uma aplicação real, você pode armazenar isso em um banco de dados)
                 session_start();
                 if (!isset($_SESSION['items'])) {
                     $_SESSION['items'] = ['Item 1', 'Item 2', 'Item 3'];
                 }
 
-                // Processar remoção de item
                 if (isset($_POST['remove'])) {
                     $index = $_POST['index'];
                     unset($_SESSION['items'][$index]);
-                    $_SESSION['items'] = array_values($_SESSION['items']); // Reindexar o array
+                    $_SESSION['items'] = array_values($_SESSION['items']);
                 }
 
-                // Processar adição de item
                 if (isset($_POST['add']) && !empty($_POST['new-item'])) {
                     $newItem = $_POST['new-item'];
                     $_SESSION['items'][] = $newItem;
                 }
-                
-                // Exibir itens
 
                 echo "<form method='post' action='sua_pagina.php'>";
                 foreach ($_SESSION['items'] as $index => $item) {
@@ -105,7 +101,6 @@
                 ?>
             </ul>
 
-            <!-- Formulário para adicionar novo item -->
             <div class="form-container">
                 <form method="post">
                     <input type="text" name="new-item" placeholder="Novo item">
@@ -118,18 +113,12 @@
                 <div class="header">
                     <h1>Day Note</h1>
                     <?php
-                        // Obtenha a data atual
                         $dataAtual = date('d/m/Y');
-                        
-                        // Exiba a data atual ao lado da palavra "Teste"
                         echo "<p><b>$dataAtual</b></p>";
                     ?>
                 </div>
                 <?php
-                    // Defina a mensagem a ser exibida
                     $mensagem = "Teste";
-                    
-                    // Exiba a mensagem
                     echo "<p>$mensagem</p>";
                 ?>
             </div>
@@ -138,7 +127,13 @@
             <img src="https://love.doghero.com.br/wp-content/uploads/2018/12/golden-retriever-1.png" alt="cachorro">
         </div>
     </div>
-    <!-- Player de Música -->
+    <div id="calendar">
+        <?php
+        include 'calendar.php';
+        $calendar = new Calendar();
+        echo $calendar->show();
+        ?>
+    </div>
     <div class="music-player">
         <h2>Música</h2>
         <audio controls>
