@@ -41,6 +41,9 @@ div#calendar div.header a.next {
     text-align: center;
 }
 
+div#calendar div.header a.next {
+    margin-right: 5px; /* Ajuste conforme necessário */
+}
 div#calendar div.header span.title {
     color: #FFF;
     font-size: 14px; /* Adjusted font size */

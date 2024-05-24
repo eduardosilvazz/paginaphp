@@ -6,10 +6,12 @@
     <title>Página da Silva</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', monospace;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            background-color: #333333;
+            color: #ffffff
         }
         .pai {
             display: flex;
@@ -19,6 +21,7 @@
             align-items: center;
             border: 1px solid black;
             padding: 10px;
+            font-family: 'Courier New', monospace;
         }
         .pai img {
             height: 100%;
@@ -31,13 +34,22 @@
             display: flex;
             width: 840px;
             height: 150px; /* Para usar flexbox */
+            
         }
         .sidebar {
             width: 200px; /* Largura da barra lateral */
-            background-color: #f0f0f0;
+            background-color: #333333;
             padding: 10px;
             margin-left: 20px; /* Margem esquerda para deslocar a barra lateral para a direita */
+            font-family: 'Courier New', monospace;
+            list-style-type: none;
+            
         }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
         .content {
             flex: 1; /* O conteúdo principal expande para ocupar o espaço restante */
             padding: 10px;
