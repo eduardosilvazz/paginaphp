@@ -11,47 +11,37 @@
             margin: 0;
             padding: 20px;
             background-color: #333333;
-            color: #ffffff
+            color: #ffffff;
         }
         .pai {
             display: flex;
             width: 100%;
-            height: 350px;
             justify-content: space-evenly;
             align-items: center;
             border: 1px solid black;
             padding: 10px;
             font-family: 'Courier New', monospace;
         }
-        .pai img {
-            height: 100%;
-        }
         .container {
-            margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
             width: 840px;
-            height: 150px; /* Para usar flexbox */
-            
         }
         .sidebar {
-            width: 200px; /* Largura da barra lateral */
+            width: 200px;
             background-color: #333333;
             padding: 10px;
-            margin-left: 20px; /* Margem esquerda para deslocar a barra lateral para a direita */
+            margin-left: 20px;
             font-family: 'Courier New', monospace;
             list-style-type: none;
-            
         }
         .sidebar ul {
             list-style-type: none;
             padding: 0;
         }
-
         .content {
-            flex: 1; /* O conteúdo principal expande para ocupar o espaço restante */
+            flex: 1;
             padding: 10px;
         }
         h1 {
@@ -69,13 +59,65 @@
             margin: 0;
         }
         .imagem {
+            height: 350px;
+        }
+        .imagem img {
             height: 100%;
         }
         .form-container {
             margin-top: 20px;
         }
         .form-container button[name="add"] {
-            margin-top: 20px;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+        .music-player {
+            width: 150px;
+            margin-left: 15px;
+        }
+        .music-player h2 {
+            text-align: center;
+        }
+        .gif-image {
+            margin-left: 35px;
+            margin-top: 50px;
+        }
+        .notes-textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .todo-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .todo-form input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .todo-form button {
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #666;
+            color: #fff;
+            cursor: pointer;
+        }
+        .todo-form button:hover {
+            background-color: #555;
         }
     </style>
     <link href="calendar.css" type="text/css" rel="stylesheet" />
@@ -84,7 +126,7 @@
     <div class="pai">
         <!-- Barra lateral -->
         <div class="sidebar">
-            <h2>Minha Lista</h2>
+            <h2>To-do List</h2>
             <ul id="item-list">
                 <?php
                 session_start();
@@ -96,25 +138,29 @@
                     $index = $_POST['index'];
                     unset($_SESSION['items'][$index]);
                     $_SESSION['items'] = array_values($_SESSION['items']);
+                    header("Location: " . $_SERVER['PHP_SELF']);
+                    exit();
                 }
 
                 if (isset($_POST['add']) && !empty($_POST['new-item'])) {
                     $newItem = $_POST['new-item'];
                     $_SESSION['items'][] = $newItem;
+                    header("Location: " . $_SERVER['PHP_SELF']);
+                    exit();
                 }
-
-                echo "<form method='post' action='sua_pagina.php'>";
-                foreach ($_SESSION['items'] as $index => $item) {
-                    echo "<li><input type='checkbox' id='item-$index' name='item-$index'><label for='item-$index'>$item ";
-                    echo "<input type='hidden' name='checkedItems[]' value='$index'>";
-                    echo "<form method='post' style='display:inline'><input type='hidden' name='index' value='$index'><button type='submit' name='remove'>Remover</button></form></li>";
-                }
-                echo "</form>";
                 ?>
+                <form method='post' action=''>
+                    <?php
+                    foreach ($_SESSION['items'] as $index => $item) {
+                        echo "<li><input type='checkbox' id='item-$index' name='item-$index'><label for='item-$index'>$item </label>";
+                        echo "<form method='post' style='display:inline'><input type='hidden' name='index' value='$index'><button type='submit' name='remove'>Remover</button></form></li>";
+                    }
+                    ?>
+                </form>
             </ul>
 
             <div class="form-container">
-                <form method="post">
+                <form method="post" class="todo-form">
                     <input type="text" name="new-item" placeholder="Novo item">
                     <button type="submit" name="add">Adicionar</button>
                 </form>
@@ -123,16 +169,13 @@
         <div class="container">
             <div class="content">
                 <div class="header">
-                    <h1>Day Note</h1>
+                    <h1>Notes</h1>
                     <?php
                         $dataAtual = date('d/m/Y');
                         echo "<p><b>$dataAtual</b></p>";
                     ?>
                 </div>
-                <?php
-                    $mensagem = "Teste";
-                    echo "<p>$mensagem</p>";
-                ?>
+                <textarea class="notes-textarea" placeholder="Digite suas notas aqui..."></textarea>
             </div>
         </div>
         <div class="imagem">
@@ -152,6 +195,9 @@
             <source src="musica.mp3" type="audio/mpeg">
             Seu navegador não suporta o elemento de áudio.
         </audio>
+    </div>
+    <div class="gif-image">
+        <img src="https://steamuserimages-a.akamaihd.net/ugc/446238782551007626/C229EF34B6B62AE2087EBDB3159F67E8E6442F06/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false">
     </div>
 </body>
 </html>
