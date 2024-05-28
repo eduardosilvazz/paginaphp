@@ -4,14 +4,13 @@ div#calendar {
     padding: 0;
     width: 400px; /* Adjusted width */
     font-family: Helvetica, "Times New Roman", Times, serif;
-    position: relative;
-    margin-right: 20px; /* Adjust as needed */
-    margin-top: 20px; /* Adjust as needed */
-    float: right;
+    margin-right: 90px;
+    
+
 }
 
 div#calendar div.box {
-    position: relative;
+  
     top: 0;
     left: 0;
     width: 100%;
@@ -22,14 +21,14 @@ div#calendar div.box {
 div#calendar div.header {
     line-height: 30px; /* Adjusted line height */
     vertical-align: middle;
-    position: relative;
+   
     width: 100%;
     height: 30px;   
     text-align: center;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px; /* Adjusted padding */
+ 
 }
 
 div#calendar div.header a.prev,
@@ -37,7 +36,7 @@ div#calendar div.header a.next {
     cursor: pointer;
     text-decoration: none;
     color: #FFF;
-    width: 30px; /* Adjusted width */
+    width: 50px; /* Adjusted width */
     text-align: center;
 }
 

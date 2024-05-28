@@ -78,11 +78,9 @@
         }
         .music-player h2 {
             text-align: center;
+            margin-left: 70px;
         }
-        .gif-image {
-            margin-left: 35px;
-            margin-top: 50px;
-        }
+       
         .notes-textarea {
             width: 100%;
             height: 100px;
@@ -92,6 +90,20 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-top: 10px;
+        }
+        .save-button {
+            margin-top: 20px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #666;
+            color: #fff;
+            cursor: pointer;
+        }
+        .save-button:hover {
+            background-color: #555;
         }
         .todo-form {
             display: flex;
@@ -119,85 +131,111 @@
         .todo-form button:hover {
             background-color: #555;
         }
-    </style>
-    <link href="calendar.css" type="text/css" rel="stylesheet" />
-</head>
-<body>
-    <div class="pai">
-        <!-- Barra lateral -->
-        <div class="sidebar">
-            <h2>To-do List</h2>
-            <ul id="item-list">
+        .gif-image{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gif-image img{
+            margin-left: 35px;
+            margin-top: 50px;
+            height: 100%;
+        }
+        
+        </style>
+        <link href="calendar.css" type="text/css" rel="stylesheet" />
+
+    </head>
+    <body>
+    <?php
+        session_start();
+    // Se o formulário foi enviado, salvar o conteúdo na sessão
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $_SESSION['notes'] = $_POST['notes'];
+    }
+
+    // Recuperar o conteúdo salvo na sessão
+    $notes = isset($_SESSION['notes']) ? $_SESSION['notes'] : '';
+?>
+<div class="pai">
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <h2>To-do List</h2>
+        <ul id="item-list">
+            <?php
+            if (!isset($_SESSION['items'])) {
+                $_SESSION['items'] = ['Item 1', 'Item 2', 'Item 3'];
+            }
+
+            if (isset($_POST['remove'])) {
+                $index = $_POST['index'];
+                unset($_SESSION['items'][$index]);
+                $_SESSION['items'] = array_values($_SESSION['items']);
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            }
+
+            if (isset($_POST['add']) && !empty($_POST['new-item'])) {
+                $newItem = $_POST['new-item'];
+                $_SESSION['items'][] = $newItem;
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            }
+            ?>
+            <form method='post' action=''>
                 <?php
-                session_start();
-                if (!isset($_SESSION['items'])) {
-                    $_SESSION['items'] = ['Item 1', 'Item 2', 'Item 3'];
-                }
-
-                if (isset($_POST['remove'])) {
-                    $index = $_POST['index'];
-                    unset($_SESSION['items'][$index]);
-                    $_SESSION['items'] = array_values($_SESSION['items']);
-                    header("Location: " . $_SERVER['PHP_SELF']);
-                    exit();
-                }
-
-                if (isset($_POST['add']) && !empty($_POST['new-item'])) {
-                    $newItem = $_POST['new-item'];
-                    $_SESSION['items'][] = $newItem;
-                    header("Location: " . $_SERVER['PHP_SELF']);
-                    exit();
+                foreach ($_SESSION['items'] as $index => $item) {
+                    echo "<li><input type='checkbox' id='item-$index' name='item-$index'><label for='item-$index'>$item </label>";
+                    echo "<form method='post' style='display:inline'><input type='hidden' name='index' value='$index'><button type='submit' name='remove'>Remover</button></form></li>";
                 }
                 ?>
-                <form method='post' action=''>
-                    <?php
-                    foreach ($_SESSION['items'] as $index => $item) {
-                        echo "<li><input type='checkbox' id='item-$index' name='item-$index'><label for='item-$index'>$item </label>";
-                        echo "<form method='post' style='display:inline'><input type='hidden' name='index' value='$index'><button type='submit' name='remove'>Remover</button></form></li>";
-                    }
-                    ?>
-                </form>
-            </ul>
+            </form>
+        </ul>
 
-            <div class="form-container">
-                <form method="post" class="todo-form">
-                    <input type="text" name="new-item" placeholder="Novo item">
-                    <button type="submit" name="add">Adicionar</button>
-                </form>
-            </div>
-        </div>
-        <div class="container">
-            <div class="content">
-                <div class="header">
-                    <h1>Notes</h1>
-                    <?php
-                        $dataAtual = date('d/m/Y');
-                        echo "<p><b>$dataAtual</b></p>";
-                    ?>
-                </div>
-                <textarea class="notes-textarea" placeholder="Digite suas notas aqui..."></textarea>
-            </div>
-        </div>
-        <div class="imagem">
-            <img src="https://love.doghero.com.br/wp-content/uploads/2018/12/golden-retriever-1.png" alt="cachorro">
+        <div class="form-container">
+            <form method="post" class="todo-form">
+                <input type="text" name="new-item" placeholder="Novo item">
+                <button type="submit" name="add">Adicionar</button>
+            </form>
         </div>
     </div>
+    <div class="container">
+        <div class="content">
+            <div class="header">
+                <h1>Notes</h1>
+                <?php
+                    $dataAtual = date('d/m/Y');
+                    echo "<p><b>$dataAtual</b></p>";
+                ?>
+            </div>
+            <form method="post">
+                <textarea class="notes-textarea" name="notes" placeholder="Digite suas notas aqui..."><?php echo htmlspecialchars($notes); ?></textarea>
+                <button type="submit" class="save-button">Salvar</button>
+            </form>
+        </div>
+    </div>
+    <div class="imagem">
+        <img src="https://love.doghero.com.br/wp-content/uploads/2018/12/golden-retriever-1.png" alt="cachorro">
+    </div>
+</div>
+
+<div class="music-player">
+    <h2>Música</h2>
+    <audio controls>
+        <source src="musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+</div>
+<div class="gif-image">
+
+<img src="https://steamuserimages-a.akamaihd.net/ugc/446238782551007626/C229EF34B6B62AE2087EBDB3159F67E8E6442F06/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tYzMYcUty6s?si=O0Wwq2WUvYMyYth7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <div id="calendar">
-        <?php
-        include 'calendar.php';
-        $calendar = new Calendar();
-        echo $calendar->show();
-        ?>
-    </div>
-    <div class="music-player">
-        <h2>Música</h2>
-        <audio controls>
-            <source src="musica.mp3" type="audio/mpeg">
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
-    </div>
-    <div class="gif-image">
-        <img src="https://steamuserimages-a.akamaihd.net/ugc/446238782551007626/C229EF34B6B62AE2087EBDB3159F67E8E6442F06/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false">
-    </div>
+    <?php
+    include 'calendar.php';
+    $calendar = new Calendar();
+    echo $calendar->show();
+    ?>
+</div>
 </body>
 </html>
